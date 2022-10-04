@@ -16,10 +16,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button button = (Button) findViewById(R.id.button);
-        TextView text = (TextView) findViewById(R.id.text);
+        //Object used to formulate HTTP request
         internetConnect connection = new internetConnect(this);
 
+        //Button to send image request to website
+        Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view)
@@ -27,5 +28,8 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        //Placeholder text
+        TextView text = (TextView) findViewById(R.id.text);
     }
 }
