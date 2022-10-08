@@ -3,6 +3,7 @@ package com.example.myapp;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -39,7 +40,7 @@ public class internetConnect
         try
         {
             // get input stream for image in asset file
-            InputStream ims = mContext.getAssets().open("src/main/assets/fountain.jpg");
+            InputStream ims = mContext.getAssets().open("fountain.jpg");
 
             //read input stream into byte array
             int nRead;
@@ -75,8 +76,8 @@ public class internetConnect
            4th is listener for response,
            5th is listener for error
          */
-            JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, "file:///C:/Users/wissm/practiceWebsite/myWebsite.html", picture, null, null);
-            //requestQueue.add();
+            JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2/myWebsite.html", picture, null, null);
+            requestQueue.add(getRequest);
         }
     }
 }
