@@ -18,8 +18,13 @@ public class MainActivity extends AppCompatActivity
     //Object used to formulate HTTP request
     internetConnect connection = new internetConnect(this);
 
+    /*launcher used to launch Intent allowing the user to choose content
+    from image folder (ActivityResultContracts.GetContent()/"image/*) and
+    returning URI of image and passing to connection.makeRequest()*/
     ActivityResultLauncher<String> mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), new ActivityResultCallback<Uri>()
     {
+        /*passes uri to connection.makeRequest()
+        once Activity returns result*/
         @Override
         public void onActivityResult(Uri uri)
         {
@@ -39,6 +44,9 @@ public class MainActivity extends AppCompatActivity
         {
             public void onClick(View view)
             {
+                /*launches mGetContent, passing
+                "image/* to indicate content should be
+                in image folder*/
                 mGetContent.launch("image/*");
             }
         });
