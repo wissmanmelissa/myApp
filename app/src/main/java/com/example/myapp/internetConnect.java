@@ -2,8 +2,7 @@ package com.example.myapp;
 
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.net.Uri;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,9 +16,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class internetConnect
+public class internetConnect implements Runnable
 {
     Context mContext;
+    Uri uri;
 
     //sets "mContext" to Context of calling Activity
     public internetConnect(Context mContext)
@@ -27,6 +27,10 @@ public class internetConnect
         this.mContext = mContext;
     }
 
+    public void setUri(Uri uri)
+    {
+        this.uri = uri;
+    }
 
     //called when user wants to make HTTP Post request to website with image
     public void makeRequest()
@@ -69,15 +73,21 @@ public class internetConnect
             }
 
 
-            //HTTP request
-            /*first argument is int indicating type of request,
+            /*HTTP request
+            first argument is int indicating type of request,
            2nd is url for website,
            3rd is JSONObject representing data sent to website,
            4th is listener for response,
-           5th is listener for error
-         */
+           5th is listener for error*/
+
             JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2/myWebsite.html", picture, null, null);
             requestQueue.add(getRequest);
         }
+    }
+
+    @Override
+    public void run()
+    {
+        makeRequest();
     }
 }
