@@ -15,6 +15,10 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class internetConnect implements Runnable
 {
@@ -38,11 +42,17 @@ public class internetConnect implements Runnable
         //Queue for HTTP requests
         RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
-        //byte array to hold image converted into bytes
-        byte[] data = new byte[16384];
-
         try
         {
+            URL url = new URL("http://10.0.2.2/myWebsite.html");
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setDoInput(true);
+            urlConnection.setRequestMethod("POST");
+            urlConnection.setRequestProperty("Content-Type", "multipart/form-data");
+
+            //byte array to hold image converted into bytes
+            byte[] data = new byte[16384];
+
             // get input stream for image in asset file
             InputStream ims = mContext.getAssets().open("fountain.jpg");
 
@@ -53,36 +63,40 @@ public class internetConnect implements Runnable
             {
                 buffer.write(data, 0, nRead);
             }
+
+            OutputStream output = urlConnection.getOutputStream();
+            output.write(data);
+
+            /*if (data != null)
+            {
+                JSONObject picture = new JSONObject();
+
+                picture.put("image", data);
+
+
+                //HTTP request
+                //first argument is int indicating type of request,
+                //2nd is url for website,
+                //3rd is JSONObject representing data sent to website,
+                //4th is listener for response,
+                //5th is listener for error
+
+                //JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2/myWebsite.html", picture, null, null);
+                //requestQueue.add(getRequest);
+            }*/
         }
-        catch (IOException e)
+        catch(MalformedURLException e)
         {
             e.printStackTrace();
         }
-
-        if(data != null)
+        catch(IOException e)
         {
-            JSONObject picture = new JSONObject();
-
-            try
-            {
-                picture.put("image", data);
-            }
-            catch(JSONException e)
-            {
-                e.printStackTrace();
-            }
-
-
-            /*HTTP request
-            first argument is int indicating type of request,
-           2nd is url for website,
-           3rd is JSONObject representing data sent to website,
-           4th is listener for response,
-           5th is listener for error*/
-
-            JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2/myWebsite.html", picture, null, null);
-            requestQueue.add(getRequest);
+            e.printStackTrace();
         }
+        /*catch(JSONException e)
+        {
+            e.printStackTrace();
+        }*/
     }
 
     @Override
