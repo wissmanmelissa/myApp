@@ -12,6 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
+
 public class MainActivity extends AppCompatActivity
 {
 
@@ -28,22 +33,21 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onActivityResult(Uri uri)
         {
-            connection.makeRequest(uri);
+            connection.setUri(uri);
+            ExecutorService execute = Executors.newFixedThreadPool(1);
+            execute.execute(connection);
         }
     });
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         //Button to send image request to website
         Button button = (Button) findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
                 /*launches mGetContent, passing
                 "image/* to indicate content should be
                 in image folder*/
