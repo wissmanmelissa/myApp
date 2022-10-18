@@ -44,7 +44,7 @@ public class internetConnect implements Runnable
 
         try
         {
-            URL url = new URL("http://10.0.2.2/myWebsite.html");
+            URL url = new URL("http://10.0.2.2:8000");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoInput(true);
             urlConnection.setRequestMethod("POST");
