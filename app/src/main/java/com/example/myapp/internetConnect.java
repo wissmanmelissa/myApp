@@ -44,7 +44,7 @@ public class internetConnect implements Runnable
 
         try
         {
-            URL url = new URL("http://10.0.2.2:8000");
+            URL url = new URL("http://10.0.2.2:80");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoInput(true);
             urlConnection.setRequestMethod("POST");
@@ -53,8 +53,8 @@ public class internetConnect implements Runnable
             //byte array to hold image converted into bytes
             byte[] data = new byte[16384];
 
-            // get input stream for image in asset file
-            InputStream ims = mContext.getAssets().open("fountain.jpg");
+            // get input stream for image chosen by user
+            InputStream ims = mContext.getContentResolver().openInputStream(uri);
 
             //read input stream into byte array
             int nRead;
@@ -64,10 +64,15 @@ public class internetConnect implements Runnable
                 buffer.write(data, 0, nRead);
             }
 
+            try(OutputStream os = urlConnection.getOutputStream())
+            {
+                os.write(data, 0, data.length);
+            }
+
             OutputStream output = urlConnection.getOutputStream();
             output.write(data);
 
-            /*if (data != null)
+            if (data != null)
             {
                 JSONObject picture = new JSONObject();
 
@@ -83,7 +88,7 @@ public class internetConnect implements Runnable
 
                 //JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2/myWebsite.html", picture, null, null);
                 //requestQueue.add(getRequest);
-            }*/
+            }
         }
         catch(MalformedURLException e)
         {
@@ -93,10 +98,10 @@ public class internetConnect implements Runnable
         {
             e.printStackTrace();
         }
-        /*catch(JSONException e)
+        catch(JSONException e)
         {
             e.printStackTrace();
-        }*/
+        }
     }
 
     @Override
