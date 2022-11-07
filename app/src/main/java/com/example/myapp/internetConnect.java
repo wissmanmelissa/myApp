@@ -4,14 +4,6 @@ package com.example.myapp;
 import android.content.Context;
 import android.net.Uri;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +23,7 @@ public class internetConnect implements Runnable
         this.mContext = mContext;
     }
 
+    //sets image uri
     public void setUri(Uri uri)
     {
         this.uri = uri;
@@ -39,15 +32,15 @@ public class internetConnect implements Runnable
     //called when user wants to make HTTP Post request to website with image
     public void makeRequest()
     {
-        //Queue for HTTP requests
-        RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         try
         {
+            //create HTTP connection to local server
             URL url = new URL("http://10.0.2.2:80");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setDoInput(true);
+            //indicate connection will be used for POST request
             urlConnection.setRequestMethod("POST");
+            //indicate request will contain multipart data
             urlConnection.setRequestProperty("Content-Type", "multipart/form-data");
 
             //byte array to hold image converted into bytes
@@ -68,37 +61,12 @@ public class internetConnect implements Runnable
             {
                 os.write(data, 0, data.length);
             }
-
-            OutputStream output = urlConnection.getOutputStream();
-            output.write(data);
-
-            if (data != null)
-            {
-                JSONObject picture = new JSONObject();
-
-                picture.put("image", data);
-
-
-                //HTTP request
-                //first argument is int indicating type of request,
-                //2nd is url for website,
-                //3rd is JSONObject representing data sent to website,
-                //4th is listener for response,
-                //5th is listener for error
-
-                //JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, "http://10.0.2.2/myWebsite.html", picture, null, null);
-                //requestQueue.add(getRequest);
-            }
         }
         catch(MalformedURLException e)
         {
             e.printStackTrace();
         }
         catch(IOException e)
-        {
-            e.printStackTrace();
-        }
-        catch(JSONException e)
         {
             e.printStackTrace();
         }
